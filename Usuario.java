@@ -1,18 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package proyectoprogra;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author Eliver Salazar Campo
- */
-class Usuario{
+public class Usuario {
     private String nombre;
     private String apellidos;
     private String usuario;
-    private String password;
+    private String passwordHash;
     private String estado;
     private String correo;
 
@@ -20,57 +14,63 @@ class Usuario{
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.usuario = usuario;
-        this.password = password;
+        setPassword(password);
         this.estado = estado;
         this.correo = correo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
     }
 
     public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public boolean verificarPassword(String password) {
+        String hashedPassword = hashPassword(password);
+        return passwordHash.equals(hashedPassword);
     }
 
-    public String getPassword() {
-        return password;
+    private void setPassword(String password) {
+        passwordHash = hashPassword(password);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
+    
 
-    public String getEstado() {
-        return estado;
-    }
+    private String hashPassword(String password) {
+    try {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));  // Use StandardCharsets.UTF_8 for consistent character encoding.
+        StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+        for (byte b : encodedHash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
+        return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        return null;
     }
 }
 
+    String getNombre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    String getApellidos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    String getEstado() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    String getCorreo() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+}
