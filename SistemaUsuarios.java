@@ -1,3 +1,8 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package proyectoprogra;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +12,10 @@ import java.awt.event.ActionListener;
 public class SistemaUsuarios extends JFrame {
     private Usuario[] usuarios = new Usuario[100];
     private int usuariosRegistrados = 0;
+    
+    // Nuevo: Arreglo de espacios
+    private Espacio[] espacios = new Espacio[100];
+    private int espaciosRegistrados = 0;
 
     private JTextField loginUsuarioField;
     private JPasswordField loginPasswordField;
@@ -182,6 +191,19 @@ public class SistemaUsuarios extends JFrame {
                 layout.show(getContentPane(), "registro"); // Mostrar el panel de registro
             }
         });
+        
+        // Nuevo: Acción al presionar el botón para gestionar espacios
+        JButton gestionarEspaciosButton = new JButton("Gestionar Espacios");
+        loginPanel.add(new JLabel("")); // Espacio en blanco
+        loginPanel.add(gestionarEspaciosButton);
+
+        // Nuevo: Acción al presionar el botón para gestionar espacios
+        gestionarEspaciosButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Muestra un formulario para gestionar espacios
+                gestionarEspacios();
+            }
+        });   
     }
     // Método para autenticar un usuario
         private Usuario autenticarUsuario(String usuario, String password) {
@@ -194,7 +216,70 @@ public class SistemaUsuarios extends JFrame {
         }
         return null;
     }
+    // Nuevo: Método para gestionar espacios
+    private void gestionarEspacios() {
+        JFrame gestionarEspaciosFrame = new JFrame("Gestionar Espacios");
+        gestionarEspaciosFrame.setLayout(new GridLayout(0, 2));
 
+        // Componentes para gestionar espacios
+        JTextField idEspacioField = new JTextField(5);
+        JTextField tipoEspacioField = new JTextField(20);
+        JTextField capacidadEspacioField = new JTextField(5);
+        JButton agregarEspacioButton = new JButton("Agregar Espacio");
+
+        // Agregar componentes al formulario de gestión de espacios
+        gestionarEspaciosFrame.add(new JLabel("ID del Espacio:"));
+        gestionarEspaciosFrame.add(idEspacioField);
+        gestionarEspaciosFrame.add(new JLabel("Tipo del Espacio:"));
+        gestionarEspaciosFrame.add(tipoEspacioField);
+        gestionarEspaciosFrame.add(new JLabel("Capacidad del Espacio:"));
+        gestionarEspaciosFrame.add(capacidadEspacioField);
+        gestionarEspaciosFrame.add(new JLabel("")); // Espacio en blanco
+        gestionarEspaciosFrame.add(agregarEspacioButton);
+
+        // Nuevo: Acción al presionar el botón para agregar espacio
+        agregarEspacioButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Capturar los datos del nuevo espacio
+                try {
+                    int idEspacio = Integer.parseInt(idEspacioField.getText());
+                    String tipoEspacio = tipoEspacioField.getText();
+                    int capacidadEspacio = Integer.parseInt(capacidadEspacioField.getText());
+
+                    // Crear un nuevo espacio
+                    Espacio nuevoEspacio = new Espacio(idEspacio, tipoEspacio, capacidadEspacio);
+
+                    // Agregar el nuevo espacio al array de espacios
+                    if (espaciosRegistrados < espacios.length) {
+                        espacios[espaciosRegistrados] = nuevoEspacio;
+                        espaciosRegistrados++;
+
+                        // Limpia los campos después de agregar el espacio
+                        idEspacioField.setText("");
+                        tipoEspacioField.setText("");
+                        capacidadEspacioField.setText("");
+
+                        // Muestra un mensaje de éxito
+                        JOptionPane.showMessageDialog(null, "Espacio agregado correctamente",
+                                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        // Manejar el caso de superar la capacidad máxima de espacios
+                        JOptionPane.showMessageDialog(null, "Se ha alcanzado la capacidad máxima de espacios.",
+                                "Capacidad Máxima Alcanzada", JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    // Manejar el caso de entrada no válida
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese datos válidos.",
+                            "Error de entrada", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        gestionarEspaciosFrame.setSize(400, 200);
+        gestionarEspaciosFrame.setVisible(true);
+    }
+        
+        
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -203,3 +288,5 @@ public class SistemaUsuarios extends JFrame {
         });
     }
 }
+
+

@@ -1,3 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package proyectoprogra;
+
+/**
+ *
+ * @author Eliver Salazar Campo
+ */
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +27,22 @@ public class Usuario {
         setPassword(password);
         this.estado = estado;
         this.correo = correo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public String getCorreo() {
+        return correo;
     }
 
     public String getUsuario() {
@@ -57,8 +83,9 @@ public class Usuario {
         return null;
     }
 }
+}
 
-    String getNombre() {
+    /*String getNombre() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -73,4 +100,5 @@ public class Usuario {
     String getCorreo() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-}
+/* */
+
