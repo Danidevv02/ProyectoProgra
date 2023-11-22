@@ -1,5 +1,7 @@
 import javax.swing.JOptionPane;
 
+
+
 public class NecesidadesEspeciales {
    private Espacio[] espacios;
    private int espaciosRegistrados;

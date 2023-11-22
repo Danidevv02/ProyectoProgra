@@ -1,9 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-
 public class Espacio {
     private int identificador;
     private boolean activo;
@@ -38,6 +32,10 @@ public class Espacio {
         return identificador;
     }
 
+    public void setIdentificador(int identificador) {
+        this.identificador = identificador;
+    }
+    
     public boolean isActivo() {
         return activo;
     }
@@ -58,6 +56,4 @@ public class Espacio {
         this.espaciosDisponibles = espaciosDisponibles;
     }
 
-    public void setIdentificador(int i) {
-    }
 }
