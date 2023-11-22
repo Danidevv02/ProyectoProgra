@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package proyectoprogra;
+
 
 public class Espacio {
     private int identificador;
@@ -56,5 +56,8 @@ public class Espacio {
 
     public void setEspaciosDisponibles(int espaciosDisponibles) {
         this.espaciosDisponibles = espaciosDisponibles;
+    }
+
+    public void setIdentificador(int i) {
     }
 }

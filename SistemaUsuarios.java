@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package proyectoprogra;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +16,9 @@ public class SistemaUsuarios extends JFrame {
     // Nuevo: Arreglo de espacios
     private Espacio[] espacios = new Espacio[100];
     private int espaciosRegistrados = 0;
+
+    private NecesidadesEspeciales necesidadesEspeciales;
+
 
     private JTextField loginUsuarioField;
     private JPasswordField loginPasswordField;
@@ -50,6 +53,9 @@ public class SistemaUsuarios extends JFrame {
 
         // Botón para cambiar al formulario de registro desde el inicio de sesión
         JButton switchToRegistroButton = new JButton("Registrar");
+        
+        //Inicializar la clase para manejar necesidades especiales
+        necesidadesEspeciales = new NecesidadesEspeciales(espacios, espaciosRegistrados);
 
         // Agregar componentes al panel de registro
         registroPanel.add(new JLabel("Nombre:"));
@@ -88,6 +94,11 @@ public class SistemaUsuarios extends JFrame {
         JButton consultarUsuariosButton = new JButton("Consultar Usuarios");
         registroPanel.add(new JLabel("")); // Espacio en blanco
         registroPanel.add(consultarUsuariosButton);
+
+         //Acción al presionar el botón para agregar espacio especial
+         JButton agregarEspacioEspecialButton = new JButton("Agregar Espacio Especial");
+         loginPanel.add(new JLabel("")); // Espacio en blanco
+         loginPanel.add(agregarEspacioEspecialButton);
 
         // Acción al presionar el botón de consultar usuarios
         consultarUsuariosButton.addActionListener(new ActionListener() {
@@ -192,19 +203,29 @@ public class SistemaUsuarios extends JFrame {
             }
         });
         
-        // Nuevo: Acción al presionar el botón para gestionar espacios
+        // Acción al presionar el botón para gestionar espacios
         JButton gestionarEspaciosButton = new JButton("Gestionar Espacios");
         loginPanel.add(new JLabel("")); // Espacio en blanco
         loginPanel.add(gestionarEspaciosButton);
 
-        // Nuevo: Acción al presionar el botón para gestionar espacios
+        // Acción al presionar el botón para gestionar espacios
         gestionarEspaciosButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Muestra un formulario para gestionar espacios
                 gestionarEspacios();
             }
         });   
+
+        // Acción al presionar el botón para agregar espacio especial
+        
+        agregarEspacioEspecialButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Muestra un formulario para agregar espacio especial
+                agregarEspacioEspecial();
+            }
+        });
     }
+
     // Método para autenticar un usuario
         private Usuario autenticarUsuario(String usuario, String password) {
             for (int i = 0; i < usuariosRegistrados; i++) {
@@ -216,7 +237,20 @@ public class SistemaUsuarios extends JFrame {
         }
         return null;
     }
-    // Nuevo: Método para gestionar espacios
+    // Método para gestionar espacios especiales
+    private void agregarEspacioEspecial() {
+        // Mostrar formulario para registrar parqueo especial
+        String tipo = JOptionPane.showInputDialog(null, "Tipo de parqueo especial:");
+        try {
+            int capacidad = Integer.parseInt(JOptionPane.showInputDialog(null, "Capacidad del parqueo especial:"));
+            necesidadesEspeciales.registrarParqueoNecesidadesEspeciales(tipo, capacidad);
+        } catch (NumberFormatException ex) {
+            // Manejar el caso de entrada no válida
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese una capacidad válida.",
+                    "Error de entrada", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Método para gestionar espacios
     private void gestionarEspacios() {
         JFrame gestionarEspaciosFrame = new JFrame("Gestionar Espacios");
         gestionarEspaciosFrame.setLayout(new GridLayout(0, 2));
@@ -237,7 +271,7 @@ public class SistemaUsuarios extends JFrame {
         gestionarEspaciosFrame.add(new JLabel("")); // Espacio en blanco
         gestionarEspaciosFrame.add(agregarEspacioButton);
 
-        // Nuevo: Acción al presionar el botón para agregar espacio
+        // Acción al presionar el botón para agregar espacio
         agregarEspacioButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Capturar los datos del nuevo espacio
