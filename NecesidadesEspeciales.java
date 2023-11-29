@@ -1,3 +1,5 @@
+package proyectoprogra;
+
 import javax.swing.JOptionPane;
 
 
@@ -43,5 +45,25 @@ public class NecesidadesEspeciales {
            }
        }
    }
+   
+    public void marcarEspacioComoDisponible(int idEspacio) {
+        Espacio espacio = encontrarEspacioPorId(idEspacio);
+        if (espacio != null) {
+            espacio.setEspaciosDisponibles(espacio.getCapacidad());
+            JOptionPane.showMessageDialog(null, "Espacio marcado como disponible", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Espacio no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private Espacio encontrarEspacioPorId(int idEspacio) {
+        for (int i = 0; i < espaciosRegistrados; i++) {
+            if (espacios[i].getIdentificador() == idEspacio) {
+                return espacios[i];
+            }
+        }
+        return null;
+    }
+
 }
 

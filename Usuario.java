@@ -1,3 +1,5 @@
+package proyectoprogra;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +11,7 @@ public class Usuario {
     private String passwordHash;
     private String estado;
     private String correo;
+    private Espacio espacioOcupado;
 
     public Usuario(String nombre, String apellidos, String usuario, String password, String estado, String correo) {
         this.nombre = nombre;
@@ -17,6 +20,19 @@ public class Usuario {
         setPassword(password);
         this.estado = estado;
         this.correo = correo;
+    }
+    
+    private void setPassword(String password) {
+        if (verificarPassword(password)) {
+            passwordHash = hashPassword(password);
+        } else {
+            // Manejar contraseña no válida, lanzar una excepción o mostrar un mensaje de error
+        }
+    }
+    
+    public boolean verificarPassword(String password) {
+        String hashedPassword = hashPassword(password);
+        return passwordHash.equals(hashedPassword);
     }
 
     public String getNombre() {
@@ -39,15 +55,6 @@ public class Usuario {
         return usuario;
     }
 
-    public boolean verificarPassword(String password) {
-        String hashedPassword = hashPassword(password);
-        return passwordHash.equals(hashedPassword);
-    }
-
-    private void setPassword(String password) {
-        passwordHash = hashPassword(password);
-    }
-
     public String getPasswordHash() {
         return passwordHash;
     }
@@ -56,7 +63,7 @@ public class Usuario {
     private String hashPassword(String password) {
     try {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));  // Use StandardCharsets.UTF_8 for consistent character encoding.
+        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
 
         for (byte b : encodedHash) {
@@ -73,22 +80,14 @@ public class Usuario {
         return null;
     }
   }
+    public void desocuparEspacio() {
+    if (espacioOcupado instanceof Espacio) {
+        Espacio espacio = (Espacio) espacioOcupado;
+        espacio.desocupar();
+        espacioOcupado = null;
+    } else {
+        System.out.println("No hay espacio ocupado para desocupar.");
+    }
 }
-
-    /*String getNombre() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    String getApellidos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    String getEstado() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    String getCorreo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-/* */
+}
 

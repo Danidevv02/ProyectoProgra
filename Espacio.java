@@ -1,16 +1,41 @@
+package proyectoprogra;
+
+
 public class Espacio {
     private int identificador;
     private boolean activo;
     private String tipo;
     private int capacidad;
     private int espaciosDisponibles;
-
+    
     public Espacio(int identificador, String tipo, int capacidad) {
         this.identificador = identificador;
         this.activo = true; // Se activa por defecto al crear un espacio
         this.tipo = tipo;
         this.capacidad = capacidad;
         this.espaciosDisponibles = capacidad;
+    }
+    
+    private Usuario ocupante;  // Asumiendo que un espacio puede ser ocupado por un Usuario
+
+    public void ocuparEspacio(Usuario usuario) {
+        if (isActivo() && espaciosDisponibles > 0) {
+            espaciosDisponibles--;
+            ocupante = usuario;
+            System.out.println("Espacio ocupado por: " + usuario.getNombre());
+        } else {
+            System.out.println("El espacio no está disponible.");
+        }
+    }
+
+    public void desocupar() {
+        if (ocupante != null) {
+            espaciosDisponibles++;
+            System.out.println("Espacio desocupado. Gracias, " + ocupante.getNombre() + "!");
+            ocupante = null;
+        } else {
+            System.out.println("El espacio ya está desocupado.");
+        }
     }
 
     // Métodos para agregar, editar e inactivar espacios
@@ -54,6 +79,6 @@ public class Espacio {
 
     public void setEspaciosDisponibles(int espaciosDisponibles) {
         this.espaciosDisponibles = espaciosDisponibles;
-    }
+    } 
 
 }

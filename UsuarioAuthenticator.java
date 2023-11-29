@@ -1,3 +1,5 @@
+package proyectoprogra;
+
 public class UsuarioAuthenticator {
     private Usuario[] usuarios = new Usuario[100];
     private int usuariosRegistrados = 0;

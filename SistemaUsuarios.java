@@ -1,9 +1,19 @@
+package proyectoprogra;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import proyectoprogra.UsuarioAuthenticator;
+import proyectoprogra.Parqueo;
+import proyectoprogra.Espacio;
+
+
+
 
 public class SistemaUsuarios extends JFrame {
+    
     private Usuario[] usuarios = new Usuario[100];
     private int usuariosRegistrados = 0;
     
@@ -97,6 +107,9 @@ public class SistemaUsuarios extends JFrame {
          JButton agregarEspacioEspecialButton = new JButton("Agregar Espacio Especial");
          loginPanel.add(new JLabel("")); // Espacio en blanco
          loginPanel.add(agregarEspacioEspecialButton);
+         
+         // Acción al presionar el botón para agregar espacio especial
+        agregarEspacioEspecialButton.addActionListener((ActionEvent e) -> agregarEspacioEspecial());
 
         // Acción al presionar el botón de consultar usuarios
         consultarUsuariosButton.addActionListener((ActionEvent e) -> {
@@ -175,9 +188,7 @@ public class SistemaUsuarios extends JFrame {
                         "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
                 loginPasswordField.setText("");
             }
-        });
-
-         
+        });         
 
         // Acción al presionar el botón para cambiar al formulario de inicio de sesión desde el registro
         switchToLoginButton.addActionListener((ActionEvent e) -> {
@@ -197,32 +208,11 @@ public class SistemaUsuarios extends JFrame {
         loginPanel.add(gestionarEspaciosButton);
 
         // Acción al presionar el botón para gestionar espacios
-        gestionarEspaciosButton.addActionListener((ActionEvent e) -> {
-            // Muestra un formulario para gestionar espacios
-            gestionarEspacios();
-        });   
+        gestionarEspaciosButton.addActionListener((ActionEvent e) -> gestionarEspacios());  
 
-        // Acción al presionar el botón para agregar espacio especial
-        
-        agregarEspacioEspecialButton.addActionListener((ActionEvent e) -> {
-            // Muestra un formulario para agregar espacio especial
-            agregarEspacioEspecial();
-        });
     }
-
-    // Método para autenticar un usuario
-        private Usuario autenticarUsuario(String usuario, String password) {
-            for (int i = 0; i < usuariosRegistrados; i++) {
-            if (usuarios[i].getUsuario().equals(usuario)) {
-                if (usuarios[i].verificarPassword(password)) {
-                    return usuarios[i];
-                }
-            }
-        }
-        return null;
-    }
-    // Método para gestionar espacios especiales
-    private void agregarEspacioEspecial() {
+       // Método para gestionar espacios especiales
+        private void agregarEspacioEspecial() {
         // Mostrar formulario para registrar parqueo especial
         String tipo = JOptionPane.showInputDialog(null, "Tipo de parqueo especial:");
         try {
@@ -234,7 +224,68 @@ public class SistemaUsuarios extends JFrame {
                     "Error de entrada", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    // Método separado para la creación de nuevos espacios
+    private void agregarEspacio(String tipoEspacio, int capacidadEspacio) {
+        // Lógica para agregar un espacio
+        // ...
+    }
+    
+    // Método para crear un registro de parqueo
+    private void crearRegistroParqueo() {
+        String numeroPlaca = JOptionPane.showInputDialog(null, "Número de Placa:");
+        Usuario cliente = obtenerUsuario(); // Implementar este método 
+        Espacio espacio = obtenerEspacioDisponible(); // Implementar este método 
+        if (cliente != null && espacio != null) {
+            espacio.ocuparEspacio(cliente);
+            RegistroParqueo registro = new RegistroParqueo(numeroPlaca, cliente, espacio);
+            parqueo.crearRegistroParqueo(registro);
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay espacios disponibles o el usuario no está registrado.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Método para finalizar un registro de parqueo
+    private void finalizarRegistroParqueo() {
+        int idEspacio = Integer.parseInt(JOptionPane.showInputDialog(null, "ID del Espacio Ocupado:"));
+        RegistroParqueo registro = obtenerRegistroPorEspacio(idEspacio); // Implementa este método según tu lógica
+        if (registro != null) {
+            parqueo.finalizarRegistroParqueo(registro);
+            necesidadesEspeciales.marcarEspacioComoDisponible(idEspacio);
+            Factura factura = registro.generarFactura();
+            if (factura != null) {
+                // Aquí puedes mostrar la factura o hacer lo que necesites con ella
+                JOptionPane.showMessageDialog(null, "Factura generada:\n" + factura.toString(),
+                        "Factura Generada", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Registro no encontrado.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private Usuario obtenerUsuario() {
+        // Falta Lógica para obtener un usuario 
+        // En este ejemplo, simplemente devuelve el primer usuario registrado
+        if (usuariosRegistrados > 0) {
+            return usuarios[0];
+        } else {
+            return null;
+        }
+    }
+
+    private RegistroParqueo obtenerRegistroPorEspacio(int idEspacio) {
+        for (RegistroParqueo registro : parqueo.getRegistros()) {
+            if (registro.getEspacio().getIdentificador() == idEspacio) {
+                return registro;
+            } else {
+            }
+        }
+        return null;
+    }
+        
     // Método para gestionar espacios
+    
     private void gestionarEspacios() {
         JFrame gestionarEspaciosFrame = new JFrame("Gestionar Espacios");
         gestionarEspaciosFrame.setLayout(new GridLayout(0, 2));
@@ -262,20 +313,20 @@ public class SistemaUsuarios extends JFrame {
                 int idEspacio = Integer.parseInt(idEspacioField.getText());
                 String tipoEspacio = tipoEspacioField.getText();
                 int capacidadEspacio = Integer.parseInt(capacidadEspacioField.getText());
-                
+
                 // Crear un nuevo espacio
                 Espacio nuevoEspacio = new Espacio(idEspacio, tipoEspacio, capacidadEspacio);
-                
+
                 // Agregar el nuevo espacio al array de espacios
                 if (espaciosRegistrados < espacios.length) {
                     espacios[espaciosRegistrados] = nuevoEspacio;
                     espaciosRegistrados++;
-                    
+
                     // Limpia los campos después de agregar el espacio
                     idEspacioField.setText("");
                     tipoEspacioField.setText("");
                     capacidadEspacioField.setText("");
-                    
+
                     // Muestra un mensaje de éxito
                     JOptionPane.showMessageDialog(null, "Espacio agregado correctamente",
                             "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -302,7 +353,18 @@ public class SistemaUsuarios extends JFrame {
                 new SistemaUsuarios().setVisible(true);
             }
         });
+    
     }
+
+    private Usuario autenticarUsuario(String usuario, String password) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private Espacio obtenerEspacioDisponible() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
 }
+
 
 
