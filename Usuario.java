@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -21,19 +20,49 @@ public class Usuario {
         this.estado = estado;
         this.correo = correo;
     }
-    
+
     private void setPassword(String password) {
-        if (verificarPassword(password)) {
-            passwordHash = hashPassword(password);
+        if (password != null && !password.isEmpty()) {
+            this.passwordHash = hashPassword(password);
         } else {
-            // Manejar contraseña no válida, lanzar una excepción o mostrar un mensaje de error
+            throw new IllegalArgumentException("La contraseña no puede ser nula o vacía.");
         }
     }
-    
+
     public boolean verificarPassword(String password) {
-        String hashedPassword = hashPassword(password);
-        return passwordHash.equals(hashedPassword);
+        return passwordHash.equals(hashPassword(password));
     }
+
+    public void desocuparEspacio() throws Exception {
+        if (espacioOcupado != null) {
+            espacioOcupado.desocupar();
+            espacioOcupado = null;
+        } else {
+            throw new IllegalStateException("No hay espacio ocupado para desocupar.");
+        }
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
+
+            for (byte b : encodedHash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Getters
 
     public String getNombre() {
         return nombre;
@@ -58,36 +87,36 @@ public class Usuario {
     public String getPasswordHash() {
         return passwordHash;
     }
-    
 
-    private String hashPassword(String password) {
-    try {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder(2 * encodedHash.length);
-
-        for (byte b : encodedHash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-
-        return hexString.toString();
-    } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-        return null;
+    public Espacio getEspacioOcupado() {
+        return espacioOcupado;
     }
-  }
-    public void desocuparEspacio() {
-    if (espacioOcupado instanceof Espacio) {
-        Espacio espacio = (Espacio) espacioOcupado;
-        espacio.desocupar();
-        espacioOcupado = null;
-    } else {
-        System.out.println("No hay espacio ocupado para desocupar.");
+
+    // Setters
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setEspacioOcupado(Espacio espacioOcupado) {
+        this.espacioOcupado = espacioOcupado;
     }
 }
-}
+
 
