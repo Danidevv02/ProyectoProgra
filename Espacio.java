@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 
 public class Espacio {
     private int identificador;
@@ -35,6 +36,11 @@ public class Espacio {
         }
     }
 
+    // Método para obtener el ocupante del espacio
+    public Usuario getOcupante() {
+        return ocupante;
+    }
+
     // Métodos para agregar, editar e inactivar espacios
 
     public void editarEspacio(String tipo, int capacidad) throws Exception {
@@ -55,6 +61,22 @@ public class Espacio {
             throw new Exception("No se puede inactivar el espacio porque no todos los espacios están disponibles.");
         }
     }
+
+    public String toString() {
+        String ocupanteInfo = (ocupante != null) ? ocupante.getNombre() + " " + ocupante.getApellidos() : "N/A";
+        return "ID: " + identificador + ", Tipo: " + tipo + ", Capacidad: " + capacidad + ", Disponibles: " + espaciosDisponibles + ", Ocupante: " + ocupanteInfo;
+    }
+    
+
+    public void asignarUsuario(Usuario usuario) throws Exception {
+    if (isActivo() && espaciosDisponibles > 0) {
+        espaciosDisponibles--;
+        ocupante = usuario;
+        System.out.println("Espacio asignado a: " + usuario.getNombre());
+    } else {
+        throw new Exception("El espacio no está disponible para asignar.");
+    }
+}
 
     // Getters y Setters
 
@@ -84,6 +106,15 @@ public class Espacio {
 
     public void setEspaciosDisponibles(int espaciosDisponibles) {
         this.espaciosDisponibles = espaciosDisponibles;
+    }
+
+    public String getNumeroPlaca() {
+        return null;
+    }
+
+    public LocalDateTime getHoraIngreso() {
+        return null;
     } 
 }
+
 

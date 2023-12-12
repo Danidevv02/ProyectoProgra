@@ -26,6 +26,11 @@ public class RegistroParqueo {
         }
     }
 
+    public double calcularTarifa() {
+        long horasEstacionado = Duration.between(horaIngreso, horaSalida).toHours();
+        return horasEstacionado * 700; // 700 colones por hora
+    }
+
     Factura generarFactura() {
         double montoTotal = calcularMontoTotal(horasEstacionado);
         double iva = calcularIVA(montoTotal);

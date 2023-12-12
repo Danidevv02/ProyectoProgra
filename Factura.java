@@ -2,7 +2,6 @@
 import java.time.LocalDateTime;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class Factura {
     private String nombreCliente;

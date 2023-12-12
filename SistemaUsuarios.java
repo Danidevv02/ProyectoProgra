@@ -2,25 +2,21 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.JFrame;
-
 public class SistemaUsuarios extends JFrame {
     private Map<String, Usuario> usuarios;
     private Map<String, Espacio> espacios;
     private Parqueo parqueo;
-    
+
     private JTextField loginUsuarioField;
     private JPasswordField loginPasswordField;
-
+    
     public SistemaUsuarios() {
         setTitle("Sistema de Usuarios");
         setSize(400, 200);
@@ -28,7 +24,8 @@ public class SistemaUsuarios extends JFrame {
 
         usuarios = new HashMap<>();
         espacios = new HashMap<>();
-        parqueo = new Parqueo(10);
+        parqueo = new Parqueo(50);
+
 
         JPanel registroPanel = new JPanel();
         JPanel loginPanel = new JPanel();
@@ -49,6 +46,8 @@ public class SistemaUsuarios extends JFrame {
 
         JButton switchToLoginButton = new JButton("Iniciar Sesión");
         JButton switchToRegistroButton = new JButton("Registrar");
+
+        
 
         registroPanel.add(new JLabel("Nombre:"));
         registroPanel.add(nombreField);
@@ -88,14 +87,27 @@ public class SistemaUsuarios extends JFrame {
         loginPanel.add(new JLabel("")); 
         loginPanel.add(agregarEspacioEspecialButton);
 
-        JButton crearRegistroParqueoButton = new JButton("Crear Registro de Parqueo");
-        registroPanel.add(crearRegistroParqueoButton);
+        JButton gestionarEspaciosButton = new JButton("Gestionar Espacios");
+        
+        loginPanel.add(gestionarEspaciosButton);
 
         JButton finalizarRegistroParqueoButton = new JButton("Finalizar Registro de Parqueo");
         loginPanel.add(finalizarRegistroParqueoButton);
 
-        JButton gestionarEspaciosButton = new JButton("Gestionar Espacios");
-        loginPanel.add(gestionarEspaciosButton);
+        JButton crearRegistroParqueoButton = new JButton("Crear Registro de Parqueo");
+        registroPanel.add(crearRegistroParqueoButton);
+
+        JButton visualizarEspaciosButton = new JButton("Visualizar Espacios");
+        loginPanel.add(new JLabel(""));
+        loginPanel.add(visualizarEspaciosButton);
+
+        JButton facturaButton = new JButton("Factura");
+        loginPanel.add(new JLabel(""));
+        loginPanel.add(facturaButton);
+
+        visualizarEspaciosButton.addActionListener((ActionEvent e) -> visualizarEspacios());
+
+        facturaButton.addActionListener((ActionEvent e) -> generarFactura());
 
         agregarEspacioEspecialButton.addActionListener((ActionEvent e) -> agregarEspacioEspecial());
 
@@ -120,6 +132,43 @@ public class SistemaUsuarios extends JFrame {
                 Logger.getLogger(SistemaUsuarios.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+
+        
+
+        
+    }
+
+    private void generarFactura() {
+        try {
+            String horasStr = JOptionPane.showInputDialog(null, "Ingrese la cantidad de horas:");
+            int horas = Integer.parseInt(horasStr);
+    
+            double montoTotal = calcularTarifa(horas);
+            double iva = montoTotal * 0.13; // IVA del 13%
+            double totalPagar = montoTotal + iva;
+    
+            JOptionPane.showMessageDialog(null, "Monto total a pagar: " + totalPagar + " colones", "Factura Generada", JOptionPane.INFORMATION_MESSAGE);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese una cantidad de horas válida.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+   
+
+    private double calcularTarifa(long horas) {
+        return horas * 700; // 700 colones por hora
+    }
+
+    public void visualizarEspacios() {
+        StringBuilder espaciosInfo = new StringBuilder("Información de Espacios:\n");
+    
+        for (Espacio espacio : espacios.values()) {
+            espaciosInfo.append(espacio.toString()).append("\n");
+        }
+    
+        // Aquí muetra la información en una ventana
+        // Ejemplo de cómo mostrar en una ventana:
+        JOptionPane.showMessageDialog(null, espaciosInfo.toString(), "Espacios Disponibles", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void cambiarFormulario(String formulario) {
@@ -134,17 +183,21 @@ public class SistemaUsuarios extends JFrame {
         String password = new String(passwordField.getPassword());
         String estado = estadoField.getText();
         String correo = correoField.getText();
-
-        Usuario nuevoUsuario = new Usuario(nombre, apellidos, usuario, password, estado, correo);
+    
+        // Agrega un número de placa ficticio o proporciona uno desde algún lugar
+        String numeroPlaca = "ABC123";  // Ejemplo
+    
+        
+        Usuario nuevoUsuario = new Usuario(nombre, apellidos, usuario, password, estado, correo, numeroPlaca);
         usuarios.put(usuario, nuevoUsuario);
-
+    
         nombreField.setText("");
         apellidosField.setText("");
         usuarioField.setText("");
         passwordField.setText("");
         estadoField.setText("");
         correoField.setText("");
-
+    
         JOptionPane.showMessageDialog(null, "Usuario registrado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -198,12 +251,20 @@ public class SistemaUsuarios extends JFrame {
         String numeroPlaca = JOptionPane.showInputDialog(null, "Número de Placa:");
         String nombreUsuario = JOptionPane.showInputDialog(null, "Nombre de Usuario:");
         Usuario cliente = usuarios.get(nombreUsuario);
-        Espacio espacio = espacios.get("Espacio 1");
-
+        Espacio espacio = espacios.get("Espacio 1"); 
+    
         if (cliente != null && espacio != null) {
             espacio.ocuparEspacio(cliente);
-            LocalDateTime horaIngreso = LocalDateTime.now();
-            RegistroParqueo registro = new RegistroParqueo(numeroPlaca, cliente, espacio, horaIngreso);
+            
+            // Obtener el registro asociado al espacio
+            RegistroParqueo registro = parqueo.getRegistroParqueoPorEspacio(espacio);
+            
+            // Si no hay registro, crear uno nuevo
+            if (registro == null) {
+                LocalDateTime horaIngreso = LocalDateTime.now();
+                registro = parqueo.crearRegistroParqueo(numeroPlaca, cliente, espacio, horaIngreso);
+            }
+            
             JOptionPane.showMessageDialog(null, "Registro de parqueo creado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "No hay espacios disponibles o el usuario no está registrado.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -212,7 +273,7 @@ public class SistemaUsuarios extends JFrame {
 
     private void finalizarRegistroParqueo() {
         int idEspacio = Integer.parseInt(JOptionPane.showInputDialog(null, "ID del Espacio Ocupado:"));
-        RegistroParqueo registro = obtenerRegistroPorEspacio(idEspacio); 
+        RegistroParqueo registro = obtenerRegistroPorEspacio(idEspacio);
         if (registro != null) {
             registro.finalizarRegistro();
             Factura factura = registro.generarFactura();
@@ -232,6 +293,53 @@ public class SistemaUsuarios extends JFrame {
         }
         return null;
     }
+
+    private RegistroParqueo buscarRegistroPorEspacio(Espacio espacio) {
+        for (RegistroParqueo registro : parqueo.getRegistros()) {
+            if (registro.getEspacio() == espacio) {
+                return registro;
+            }
+        }
+        return null;
+    }
+
+    public void obtenerInfoEspacio(Espacio espacio) {
+        System.out.println("Información del Espacio:");
+
+        try {
+            if (espacio != null) {
+                System.out.println("Identificador: " + espacio.getIdentificador());
+                System.out.println("Tipo: " + espacio.getTipo());
+                System.out.println("Capacidad: " + espacio.getCapacidad());
+                System.out.println("Espacios disponibles: " + espacio.getEspaciosDisponibles());
+
+                RegistroParqueo registro = buscarRegistroPorEspacio(espacio);
+
+                if (registro != null) {
+                    System.out.println("Estado: Ocupado");
+                    System.out.println("Nombre del usuario: " + registro.getCliente().getNombre());
+                    System.out.println("Número de placa: " + registro.getNumeroPlaca());
+                    System.out.println("Tiempo transcurrido: " + calcularTiempoTranscurrido(registro.getHoraIngreso()));
+                } else {
+                    System.out.println("Estado: Disponible");
+                }
+            } else {
+                System.out.println("Espacio no encontrado.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al obtener información del espacio: " + e.getMessage());
+        }
+    }
+
+    private String calcularTiempoTranscurrido(LocalDateTime horaIngreso) {
+        LocalDateTime horaActual = LocalDateTime.now();
+        long minutosTranscurridos = ChronoUnit.MINUTES.between(horaIngreso, horaActual);
+        long horas = minutosTranscurridos / 60;
+        long minutos = minutosTranscurridos % 60;
+        return horas + " horas y " + minutos + " minutos";
+    }
+
+    
 
     private void gestionarEspacios() {
         JFrame gestionarEspaciosFrame = new JFrame("Gestionar Espacios");

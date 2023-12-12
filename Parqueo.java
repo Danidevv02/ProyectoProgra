@@ -2,7 +2,6 @@
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,7 +91,13 @@ public class Parqueo {
     
     public RegistroParqueo crearRegistroParqueo(String numeroPlaca, Usuario cliente, Espacio espacio, LocalDateTime horaIngreso) {
         RegistroParqueo nuevoRegistro = new RegistroParqueo(numeroPlaca, cliente, espacio, horaIngreso);
+
+        // Agregar el registro a la lista de registros del parqueo
+        agregarRegistro(nuevoRegistro);
+
+        // Mostrar mensaje
         JOptionPane.showMessageDialog(null, "Registro de parqueo creado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
         return nuevoRegistro;
     }
 
@@ -133,6 +138,10 @@ public class Parqueo {
     public Map<LocalDate, Double> getGananciasPorDia() {
         return gananciasPorDia;
         
+    }
+
+    public RegistroParqueo getRegistroParqueoPorEspacio(Espacio espacio) {
+        return null;
     }
 }
 

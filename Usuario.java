@@ -2,6 +2,7 @@
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
 public class Usuario {
     private String nombre;
@@ -10,15 +11,17 @@ public class Usuario {
     private String passwordHash;
     private String estado;
     private String correo;
+    private String numeroPlaca;  // Nueva propiedad para el número de placa
     private Espacio espacioOcupado;
 
-    public Usuario(String nombre, String apellidos, String usuario, String password, String estado, String correo) {
+    public Usuario(String nombre, String apellidos, String usuario, String password, String estado, String correo, String numeroPlaca) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.usuario = usuario;
         setPassword(password);
         this.estado = estado;
         this.correo = correo;
+        this.numeroPlaca = numeroPlaca;
     }
 
     private void setPassword(String password) {
@@ -40,6 +43,21 @@ public class Usuario {
         } else {
             throw new IllegalStateException("No hay espacio ocupado para desocupar.");
         }
+    }
+
+    public LocalDateTime getHoraIngresoEspacioOcupado() {
+        if (espacioOcupado != null) {
+            RegistroParqueo registro = buscarRegistroPorEspacio(espacioOcupado);
+            if (registro != null) {
+                return registro.getHoraIngreso();
+            }
+        }
+        // Devolver null o lanzar una excepción
+        return null;
+    }
+
+    private RegistroParqueo buscarRegistroPorEspacio(Espacio espacioOcupado2) {
+        return null;
     }
 
     private String hashPassword(String password) {
@@ -88,6 +106,10 @@ public class Usuario {
         return passwordHash;
     }
 
+    public String getNumeroPlaca() {
+        return numeroPlaca;
+    }
+
     public Espacio getEspacioOcupado() {
         return espacioOcupado;
     }
@@ -114,9 +136,14 @@ public class Usuario {
         this.usuario = usuario;
     }
 
+    public void setNumeroPlaca(String numeroPlaca) {
+        this.numeroPlaca = numeroPlaca;
+    }
+
     public void setEspacioOcupado(Espacio espacioOcupado) {
         this.espacioOcupado = espacioOcupado;
     }
 }
+
 
 
