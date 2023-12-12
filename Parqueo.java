@@ -132,6 +132,7 @@ public class Parqueo {
 
     public Map<LocalDate, Double> getGananciasPorDia() {
         return gananciasPorDia;
+        
     }
 }
 

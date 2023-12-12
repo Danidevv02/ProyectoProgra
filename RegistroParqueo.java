@@ -7,6 +7,7 @@ public class RegistroParqueo {
     private Usuario cliente;
     private LocalDateTime horaSalida;
     private long horasEstacionado;
+    private Espacio espacio;
 
     public RegistroParqueo(String numeroPlaca, Usuario cliente, Espacio espacio, LocalDateTime horaIngreso) {
         this.horaIngreso = horaIngreso;
@@ -59,6 +60,10 @@ public class RegistroParqueo {
 
     public LocalDateTime getHoraSalida() {
         return horaSalida;
+    }
+    
+    public Espacio getEspacio() {
+        return espacio;
     }
     
 }
