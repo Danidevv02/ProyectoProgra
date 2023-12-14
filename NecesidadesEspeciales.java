@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import javax.swing.JOptionPane;
 

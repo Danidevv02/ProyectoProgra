@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import java.time.LocalDateTime;
 

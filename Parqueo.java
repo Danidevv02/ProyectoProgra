@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
@@ -108,7 +107,7 @@ public class Parqueo {
     }
 
     public Factura finalizarRegistroParqueo(RegistroParqueo registro) {
-        registro.finalizarRegistro();
+        //registro.finalizarRegistro();
         Factura factura = registro.generarFactura();
         agregarGananciasPorDia(registro.getHoraIngreso().toLocalDate(), factura.getTotalPagar());
         JOptionPane.showMessageDialog(null, "Registro de parqueo finalizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);

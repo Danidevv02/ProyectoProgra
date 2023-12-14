@@ -1,4 +1,4 @@
-package proyectoprogra;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -92,7 +92,6 @@ public class SistemaUsuarios extends JFrame {
         JButton consultarUsuariosButton = new JButton("Consultar Usuarios");
         JButton agregarEspacioEspecialButton = new JButton("Agregar Espacio Especial");
         JButton gestionarEspaciosButton = new JButton("Gestionar Espacios");
-        JButton finalizarRegistroParqueoButton = new JButton("Finalizar Registro de Parqueo");
         JButton crearRegistroParqueoButton = new JButton("Crear Registro de Parqueo");
         JButton visualizarEspaciosButton = new JButton("Visualizar Espacios");
         JButton facturaButton = new JButton("Factura");
@@ -105,10 +104,8 @@ public class SistemaUsuarios extends JFrame {
         loginPanel.add(crearRegistroParqueoButton);
         loginPanel.add(agregarEspacioEspecialButton);
         loginPanel.add(gestionarEspaciosButton);
-        loginPanel.add(finalizarRegistroParqueoButton);
         loginPanel.add(new JLabel(""));
         loginPanel.add(visualizarEspaciosButton);
-        loginPanel.add(new JLabel(""));
         loginPanel.add(facturaButton);
 
         // Configuración de listeners para algunos botones adicionales
@@ -120,7 +117,6 @@ public class SistemaUsuarios extends JFrame {
         loginButton.addActionListener((ActionEvent e) -> autenticarUsuario());
         switchToLoginButton.addActionListener((ActionEvent e) -> cambiarFormulario("login"));
         switchToRegistroButton.addActionListener((ActionEvent e) -> cambiarFormulario("registro"));
-        finalizarRegistroParqueoButton.addActionListener((ActionEvent e) -> finalizarRegistroParqueo());
         gestionarEspaciosButton.addActionListener((ActionEvent e) -> gestionarEspacios());
 
         crearRegistroParqueoButton.addActionListener((ActionEvent e) -> {
@@ -282,31 +278,7 @@ public class SistemaUsuarios extends JFrame {
             JOptionPane.showMessageDialog(null, "No hay espacios disponibles o el usuario no está registrado.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    // Método para finalizar el registro de parqueo y generar una factura
-    private void finalizarRegistroParqueo() {
-        int idEspacio = Integer.parseInt(JOptionPane.showInputDialog(null, "ID del Espacio Ocupado:"));
-        RegistroParqueo registro = obtenerRegistroPorEspacio(idEspacio);
-        if (registro != null) {
-            registro.finalizarRegistro();
-            Factura factura = registro.generarFactura();
-            if (factura != null) {
-                JOptionPane.showMessageDialog(null, "Factura generada:\n" + factura.toString(), "Factura Generada", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Registro no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    // Método para obtener un registro de parqueo por ID de espacio
-    private RegistroParqueo obtenerRegistroPorEspacio(int idEspacio) {
-        for (RegistroParqueo registro : parqueo.getRegistros()) {
-            if (registro.getEspacio().getIdentificador() == idEspacio) {
-                return registro;
-            }
-        }
-        return null;
-    }
+   
 
     // Método para buscar un registro de parqueo por espacio
     private RegistroParqueo buscarRegistroPorEspacio(Espacio espacio) {

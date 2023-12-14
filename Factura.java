@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import java.time.LocalDateTime;
 import java.time.Duration;
@@ -15,8 +14,8 @@ public class Factura {
     
     // Constructor para crear una nueva factura
     public Factura(String nombre, LocalDateTime horaIngreso, LocalDateTime horaSalida, long horasEstacionado, double montoTotal, double iva, double totalPagar) {
-        this.nombreCliente = nombreCliente;
-        this.horaEntrada = horaEntrada;
+        //this.nombreCliente = nombreCliente;
+        //this.horaEntrada = horaEntrada;
         this.horaSalida = horaSalida;
         this.horasEstacionado = Duration.between(horaEntrada, horaSalida).toHours();
         this.montoTotal = calcularMontoTotal();

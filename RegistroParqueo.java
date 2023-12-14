@@ -1,4 +1,3 @@
-package proyectoprogra;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -21,15 +20,7 @@ public class RegistroParqueo {
     }
     
     // Finalizar el registro de parqueo y generar una factura
-    public Factura finalizarRegistro() {
-        if (horaSalida == null) {
-            this.horaSalida = LocalDateTime.now();
-            long horasEstacionado = Duration.between(horaIngreso, horaSalida).toHours();
-            return generarFactura();
-        } else {
-            throw new IllegalStateException("El registro ya ha sido finalizado.");
-        }
-    }
+   
     // Calcular la tarifa del registro de parqueo
     public double calcularTarifa() {
         long horasEstacionado = Duration.between(horaIngreso, horaSalida).toHours();
