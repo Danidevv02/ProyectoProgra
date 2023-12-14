@@ -1,16 +1,19 @@
+package proyectoprogra;
 
 import javax.swing.JOptionPane;
 
-
+//Atributos de la clase
 public class NecesidadesEspeciales {
     private Espacio[] espacios;
     private int espaciosRegistrados;
-
+    
+    // Constructor para inicializar espacios de necesidades especiales
     public NecesidadesEspeciales(int maxEspacios) {
         this.espacios = new Espacio[maxEspacios];
         this.espaciosRegistrados = 0;
     }
 
+    // Registrar un nuevo parqueo para necesidades especiales
     public void registrarParqueoNecesidadesEspeciales(String tipo, int capacidad) {
         if (espaciosRegistrados < espacios.length) {
             Espacio nuevoEspacio = new Espacio(espaciosRegistrados + 1, tipo, capacidad);
@@ -23,7 +26,8 @@ public class NecesidadesEspeciales {
                     "Capacidad Máxima Alcanzada", JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    
+    //Ajustar numeracion de espacios
     private void ajustarNumeracionNecesidadesEspeciales() {
         for (int i = espaciosRegistrados - 1; i >= 0; i--) {
             Espacio espacioActual = espacios[i];
@@ -33,6 +37,7 @@ public class NecesidadesEspeciales {
         }
     }
 
+    // Marcar un espacio como disponible para necesidades especiales
     public void marcarEspacioComoDisponible(int idEspacio) {
         Espacio espacio = encontrarEspacioPorId(idEspacio);
         if (espacio != null) {

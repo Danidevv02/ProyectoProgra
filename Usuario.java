@@ -1,9 +1,11 @@
+package proyectoprogra;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
+//Atributos de la clase
 public class Usuario {
     private String nombre;
     private String apellidos;
@@ -13,7 +15,8 @@ public class Usuario {
     private String correo;
     private String numeroPlaca;  // Nueva propiedad para el número de placa
     private Espacio espacioOcupado;
-
+    
+    // Constructor para crear un nuevo usuario
     public Usuario(String nombre, String apellidos, String usuario, String password, String estado, String correo, String numeroPlaca) {
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -23,7 +26,8 @@ public class Usuario {
         this.correo = correo;
         this.numeroPlaca = numeroPlaca;
     }
-
+    
+    //Verificar que la contraseña no sea nula o vacía
     private void setPassword(String password) {
         if (password != null && !password.isEmpty()) {
             this.passwordHash = hashPassword(password);
@@ -31,7 +35,8 @@ public class Usuario {
             throw new IllegalArgumentException("La contraseña no puede ser nula o vacía.");
         }
     }
-
+    
+    // Verificar si la contraseña proporcionada es correcta
     public boolean verificarPassword(String password) {
         return passwordHash.equals(hashPassword(password));
     }
@@ -144,6 +149,5 @@ public class Usuario {
         this.espacioOcupado = espacioOcupado;
     }
 }
-
 
 

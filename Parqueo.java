@@ -1,3 +1,4 @@
+package proyectoprogra;
 
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
@@ -5,13 +6,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+//Atributos
 public class Parqueo {
     private Espacio[] espacios;
     private int espaciosRegistrados;
     private Map<LocalDate, Double> gananciasPorDia;
     private RegistroParqueo[] registros;
     private int numRegistros;
-
+    
+    // Constructor para inicializar el parqueo
     public Parqueo(int maxEspacios) {
         this.espacios = new Espacio[maxEspacios];
         this.espaciosRegistrados = 0;
@@ -20,6 +23,7 @@ public class Parqueo {
         this.numRegistros = 0;
     }
     
+    // Agregar un nuevo registro de parqueo
     public void agregarRegistro(RegistroParqueo registro) {
         int numRegistro = 0;
         if(numRegistro < registros.length){
@@ -30,12 +34,14 @@ public class Parqueo {
         }
     }
     
+    // Obtener la lista de registros activos
     public RegistroParqueo[] getRegistros() {
         RegistroParqueo[] registrosActivos = new RegistroParqueo[numRegistros];
         System.arraycopy(registros, 0, registrosActivos, 0, numRegistros);
         return registrosActivos;
     }
-   
+    
+    //Métodos de gestión de espacios y registros
     private Espacio encontrarEspacioPorId(int idEspacio) {
         for (int i = 0; i < espaciosRegistrados; i++) {
             if (espacios[i].getIdentificador() == idEspacio) {
@@ -141,8 +147,18 @@ public class Parqueo {
     }
 
     public RegistroParqueo getRegistroParqueoPorEspacio(Espacio espacio) {
+        for (int i = 0; i < getRegistros().length; i++) {
+            if (getRegistros()[i].getEspacio() == espacio) {
+
+                return getRegistros()[i];
+
+            }
+
+        }
+
         return null;
     }
+    
 }
 
 

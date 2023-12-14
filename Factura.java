@@ -1,8 +1,9 @@
+package proyectoprogra;
 
 import java.time.LocalDateTime;
-
 import java.time.Duration;
 
+//Atributos de la clase
 public class Factura {
     private String nombreCliente;
     private LocalDateTime horaEntrada;
@@ -11,8 +12,9 @@ public class Factura {
     private double montoTotal;
     private double iva;
     private double totalPagar;
-
-    public Factura(String nombreCliente, LocalDateTime horaEntrada, LocalDateTime horaSalida) {
+    
+    // Constructor para crear una nueva factura
+    public Factura(String nombre, LocalDateTime horaIngreso, LocalDateTime horaSalida, long horasEstacionado, double montoTotal, double iva, double totalPagar) {
         this.nombreCliente = nombreCliente;
         this.horaEntrada = horaEntrada;
         this.horaSalida = horaSalida;
@@ -20,10 +22,6 @@ public class Factura {
         this.montoTotal = calcularMontoTotal();
         this.iva = calcularIVA();
         this.totalPagar = calcularTotalPagar();
-    }
-
-    Factura(String nombre, LocalDateTime horaIngreso, LocalDateTime horaSalida, long horasEstacionado, double montoTotal, double iva, double totalPagar) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private double calcularMontoTotal() {

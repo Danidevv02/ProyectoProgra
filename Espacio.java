@@ -1,5 +1,8 @@
+package proyectoprogra;
+
 import java.time.LocalDateTime;
 
+//Atributos de la clase
 public class Espacio {
     private int identificador;
     private boolean activo;
@@ -8,6 +11,7 @@ public class Espacio {
     private int espaciosDisponibles;
     private Usuario ocupante;  // Asumiendo que un espacio puede ser ocupado por un Usuario
 
+    // Constructor para crear un nuevo espacio
     public Espacio(int identificador, String tipo, int capacidad) {
         this.identificador = identificador;
         this.activo = true; // Se activa por defecto al crear un espacio
@@ -16,6 +20,7 @@ public class Espacio {
         this.espaciosDisponibles = capacidad;
     }
 
+    // Ocupar un espacio con un usuario
     public void ocuparEspacio(Usuario usuario) throws Exception {
         if (isActivo() && espaciosDisponibles > 0) {
             espaciosDisponibles--;
@@ -26,6 +31,7 @@ public class Espacio {
         }
     }
 
+    // Desocupar un espacio
     public void desocupar() throws Exception {
         if (ocupante != null) {
             espaciosDisponibles++;
@@ -42,7 +48,6 @@ public class Espacio {
     }
 
     // Métodos para agregar, editar e inactivar espacios
-
     public void editarEspacio(String tipo, int capacidad) throws Exception {
         if (espaciosDisponibles == this.capacidad) { // Solo se puede editar si todos los espacios están disponibles
             this.tipo = tipo;
@@ -53,6 +58,7 @@ public class Espacio {
         }
     }
 
+    // Métodos para agregar, editar e inactivar espacios
     public void inactivarEspacio() throws Exception {
         if (espaciosDisponibles == capacidad) { // Solo se puede inactivar si todos los espacios están disponibles
             this.activo = false;
@@ -61,13 +67,14 @@ public class Espacio {
             throw new Exception("No se puede inactivar el espacio porque no todos los espacios están disponibles.");
         }
     }
-
+    //Información sobre el identificador, tipo, capacidad,
+    //espacios disponibles y el nombre del ocupante si está ocupado.
     public String toString() {
         String ocupanteInfo = (ocupante != null) ? ocupante.getNombre() + " " + ocupante.getApellidos() : "N/A";
         return "ID: " + identificador + ", Tipo: " + tipo + ", Capacidad: " + capacidad + ", Disponibles: " + espaciosDisponibles + ", Ocupante: " + ocupanteInfo;
     }
     
-
+    // Métodos para agregar, editar e inactivar espacios
     public void asignarUsuario(Usuario usuario) throws Exception {
     if (isActivo() && espaciosDisponibles > 0) {
         espaciosDisponibles--;
@@ -116,5 +123,4 @@ public class Espacio {
         return null;
     } 
 }
-
 

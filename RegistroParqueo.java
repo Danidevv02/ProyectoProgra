@@ -1,6 +1,9 @@
+package proyectoprogra;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+//Atributos
 public class RegistroParqueo {
     private LocalDateTime horaIngreso;
     private String numeroPlaca;
@@ -8,14 +11,16 @@ public class RegistroParqueo {
     private LocalDateTime horaSalida;
     private long horasEstacionado;
     private Espacio espacio;
-
+    
+    // Constructor para crear un nuevo registro de parqueo
     public RegistroParqueo(String numeroPlaca, Usuario cliente, Espacio espacio, LocalDateTime horaIngreso) {
         this.horaIngreso = horaIngreso;
         this.numeroPlaca = numeroPlaca;
         this.cliente = cliente;
         this.horaSalida = null; // La hora de salida se establecerá cuando se finalice el registro
     }
-
+    
+    // Finalizar el registro de parqueo y generar una factura
     public Factura finalizarRegistro() {
         if (horaSalida == null) {
             this.horaSalida = LocalDateTime.now();
@@ -25,7 +30,7 @@ public class RegistroParqueo {
             throw new IllegalStateException("El registro ya ha sido finalizado.");
         }
     }
-
+    // Calcular la tarifa del registro de parqueo
     public double calcularTarifa() {
         long horasEstacionado = Duration.between(horaIngreso, horaSalida).toHours();
         return horasEstacionado * 700; // 700 colones por hora
@@ -54,7 +59,8 @@ public class RegistroParqueo {
     public LocalDateTime getHoraIngreso() {
         return horaIngreso;
     }
-
+    
+    //Getter
     public String getNumeroPlaca() {
         return numeroPlaca;
     }
